@@ -173,6 +173,9 @@
                                 <option value="2º TEN">2º Tenente</option>
                                 <option value="1º TEN">1º Tenente</option>
                                 <option value="CAP">Capitão</option>
+                                <option value="MAJ">Major</option>
+                                <option value="TC">Tenente Coronel</option>
+                                <option value="CEL">Coronel</option>
                             </select>
                         </div>
                     </div>
@@ -266,21 +269,6 @@
             </div>
         </div>
 
-        <!-- Exportar Dados -->
-        <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
-            <div class="p-6 text-center">
-                <h4 class="text-lg font-bold text-gray-800 mb-4">Exportar Dados</h4>
-                <div class="space-x-4">
-                    <button onclick="exportarPDF()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md font-bold transition-colors">
-                        Baixar PDF
-                    </button>
-                    <button onclick="exportarExcel()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-md font-bold transition-colors">
-                        Baixar Excel
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Lista de Militares -->
         <div class="bg-white rounded-lg shadow-xl animate-fade-in">
             <div class="p-6">
@@ -295,6 +283,21 @@
             </div>
         </div>
     </div>
+
+        <!-- Exportar Dados -->
+        <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6 text-center">
+                <h4 class="text-lg font-bold text-gray-800 mb-4">Exportar Dados</h4>
+                <div class="space-x-4">
+                    <button onclick="exportarPDF()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md font-bold transition-colors">
+                        Baixar PDF
+                    </button>
+                    <button onclick="exportarExcel()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-md font-bold transition-colors">
+                        Baixar Excel
+                    </button>
+                </div>
+            </div>
+        </div>
 
     <!-- Notification Popup -->
     <div id="notificationPopup" class="notification-popup"></div>
