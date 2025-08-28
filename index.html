@@ -1,142 +1,824 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Cadastro de Arejamento - Exército Brasileiro</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-.gradient-bg { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
-.gradient-green { background: linear-gradient(135deg, #0f4c3a 0%, #1a7a5e 100%); }
-.gradient-card { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
-.animate-fade-in { animation: fadeIn 0.5s ease-in; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-.status-badge { padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:bold; }
-.status-ativo { background:#d4edda; color:#155724; }
-.status-aguardando { background:#fff3cd; color:#856404; }
-.status-concluido { background:#d1ecf1; color:#0c5460; }
-.status-finalizado { background:#f8d7da; color:#721c24; }
-.timeline-item { position:relative; padding-left:30px; margin-bottom:15px; }
-.timeline-item::before { content:''; position:absolute; left:10px; top:8px; width:10px; height:10px; background:#1a7a5e; border-radius:50%; }
-.timeline-item::after { content:''; position:absolute; left:14px; top:18px; width:2px; height:100%; background:#dee2e6; }
-.timeline-item:last-child::after { display:none; }
-.notification-popup { position:fixed; top:20px; right:20px; z-index:1000; max-width:350px; padding:15px; border-radius:8px; color:white; font-weight:bold; transform:translateX(100%); transition:transform 0.3s ease; }
-.notification-popup.show { transform:translateX(0); }
-.notification-success { background:#28a745; }
-.notification-error { background:#dc3545; }
-.notification-warning { background:#ffc107; color:#000; }
-.army-emblem { width:80px; height:80px; background:linear-gradient(135deg, #228B22 0%, #32CD32 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:24px; margin:0 auto; }
-.empty-state-icon { width:200px; height:150px; background:linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius:10px; display:flex; align-items:center; justify-content:center; color:#6c757d; font-size:48px; margin:0 auto; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastro de Arejamento - Exército Brasileiro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #0f4c3a 0%, #1a7a5e 100%);
+        }
+
+        .gradient-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .status-ativo { background: #d4edda; color: #155724; }
+        .status-aguardando { background: #fff3cd; color: #856404; }
+        .status-concluido { background: #d1ecf1; color: #0c5460; }
+        .status-finalizado { background: #f8d7da; color: #721c24; }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: #1a7a5e;
+            border-radius: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 18px;
+            width: 2px;
+            height: 100%;
+            background: #dee2e6;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .notification-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 350px;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-popup.show {
+            transform: translateX(0);
+        }
+
+        .notification-success { background: #28a745; }
+        .notification-error { background: #dc3545; }
+        .notification-warning { background: #ffc107; color: #000; }
+
+        .army-emblem {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            margin: 0 auto;
+        }
+
+        .empty-state-icon {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 48px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body class="gradient-bg min-h-screen">
-<header class="gradient-green text-white py-8">
-<div class="container mx-auto px-4 text-center">
-<div class="army-emblem mb-4">EB</div>
-<h1 class="text-4xl font-bold mb-2">Sistema de Cadastro de Arejamento</h1>
-<h2 class="text-xl font-light">Exército Brasileiro - Destacamento/Sede</h2>
-<div class="mt-4 text-sm opacity-90" id="currentDateTime"></div>
-</div>
-</header>
+    <!-- Header -->
+    <header class="gradient-green text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="army-emblem mb-4">EB</div>
+            <h1 class="text-4xl font-bold mb-2">Sistema de Cadastro de Arejamento</h1>
+            <h2 class="text-xl font-light">Exército Brasileiro - Destacamento/Sede</h2>
+            <div class="mt-4 text-sm opacity-90" id="currentDateTime"></div>
+        </div>
+    </header>
 
-<div class="container mx-auto px-4 py-8">
-<div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
-<div class="p-6 border-b border-gray-200">
-<h3 class="text-2xl font-bold text-gray-800 mb-4">Cadastro de Militar</h3>
-<div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-<div class="font-bold text-yellow-800 mb-2">CRITÉRIO OBRIGATÓRIO DE AREJAMENTO</div>
-<ul class="text-yellow-700 space-y-1">
-<li><strong>Para cada 5 dias completos de serviço = 1 dia de arejamento</strong></li>
-<li>Exemplo: 23 dias de serviço = 4 dias de arejamento (3 dias perdidos)</li>
-<li>Exemplo: 25 dias de serviço = 5 dias de arejamento (divisão exata)</li>
-<li><strong>SISTEMA AUTOMÁTICO:</strong> O arejamento inicia automaticamente na data prevista</li>
-</ul>
-</div>
+    <div class="container mx-auto px-4 py-8">
+        <!-- Formulário de Cadastro -->
+        <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Cadastro de Militar</h3>
+                
+                <!-- Critério de Arejamento -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <div class="font-bold text-yellow-800 mb-2">CRITÉRIO OBRIGATÓRIO DE AREJAMENTO</div>
+                    <ul class="text-yellow-700 space-y-1">
+                        <li><strong>Para cada 5 dias completos de serviço = 1 dia de arejamento</strong></li>
+                        <li>Exemplo: 23 dias de serviço = 4 dias de arejamento (3 dias perdidos)</li>
+                        <li>Exemplo: 25 dias de serviço = 5 dias de arejamento (divisão exata)</li>
+                        <li><strong>SISTEMA AUTOMÁTICO:</strong> O arejamento inicia automaticamente na data prevista</li>
+                    </ul>
+                </div>
 
-<form id="militarForm" class="space-y-6">
-<div class="grid md:grid-cols-2 gap-6">
-<div>
-<label for="nomeGuerra" class="block text-sm font-medium text-gray-700 mb-2">Nome de Guerra:</label>
-<input type="text" id="nomeGuerra" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Digite o nome de guerra">
-</div>
-<div>
-<label for="posto" class="block text-sm font-medium text-gray-700 mb-2">Posto/Graduação:</label>
-<select id="posto" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-<option value="">Selecione</option>
-<option value="SD">Soldado</option>
-<option value="CB">Cabo</option>
-<option value="3º SGT">3º Sargento</option>
-<option value="2º SGT">2º Sargento</option>
-<option value="1º SGT">1º Sargento</option>
-<option value="ST">Subtenente</option>
-<option value="2º TEN">2º Tenente</option>
-<option value="1º TEN">1º Tenente</option>
-<option value="CAP">Capitão</option>
-<option value="MAJ">Major</option>
-<option value="TC">Tenente Coronel</option>
-<option value="CEL">Coronel</option>
-</select>
-</div>
-</div>
+                <form id="militarForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nomeGuerra" class="block text-sm font-medium text-gray-700 mb-2">Nome de Guerra:</label>
+                            <input type="text" id="nomeGuerra" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                placeholder="Digite o nome de guerra">
+                        </div>
 
-<div class="grid md:grid-cols-2 gap-6">
-<div>
-<label for="tipoDeslocamento" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Deslocamento:</label>
-<select id="tipoDeslocamento" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-<option value="">Selecione o deslocamento</option>
-<option value="STM-MCP">Santarém/PA → Macapá/AP (2 dias)</option>
-<option value="MCP-STM">Macapá/AP → Santarém/PA (2 dias)</option>
-</select>
-</div>
-<div>
-<label for="apresentacao" class="block text-sm font-medium text-gray-700 mb-2">Local de Apresentação:</label>
-<select id="apresentacao" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-<option value="">Selecione onde se apresentará</option>
-<option value="Destacamento Macapá/AP">Destacamento Macapá/AP</option>
-<option value="Sede Santarém/PA">Sede Santarém/PA</option>
-</select>
-</div>
-</div>
+                        <div>
+                            <label for="posto" class="block text-sm font-medium text-gray-700 mb-2">Posto/Graduação:</label>
+                            <select id="posto" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Selecione</option>
+                                <option value="SD">Soldado</option>
+                                <option value="CB">Cabo</option>
+                                <option value="3º SGT">3º Sargento</option>
+                                <option value="2º SGT">2º Sargento</option>
+                                <option value="1º SGT">1º Sargento</option>
+                                <option value="ST">Subtenente</option>
+                                <option value="2º TEN">2º Tenente</option>
+                                <option value="1º TEN">1º Tenente</option>
+                                <option value="CAP">Capitão</option>
+                                <option value="MAJ">Major</option>
+                                <option value="TC">Tenente Coronel</option>
+                                <option value="CEL">Coronel</option>
+                            </select>
+                        </div>
+                    </div>
 
-<div class="grid md:grid-cols-3 gap-6">
-<div>
-<label for="dataSaidaOrigem" class="block text-sm font-medium text-gray-700 mb-2">Data de Saída da Origem:</label>
-<input type="date" id="dataSaidaOrigem" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-</div>
-<div>
-<label for="dataChegadaDestino" class="block text-sm font-medium text-gray-700 mb-2">Chegada no Destino:</label>
-<input type="date" id="dataChegadaDestino" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
-</div>
-<div>
-<label for="dataSaidaDestino" class="block text-sm font-medium text-gray-700 mb-2">Saída do Destino:</label>
-<input type="date" id="dataSaidaDestino" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-</div>
-</div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="tipoDeslocamento" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Deslocamento:</label>
+                            <select id="tipoDeslocamento" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Selecione o deslocamento</option>
+                                <option value="STM-MCP">Santarém/PA → Macapá/AP (2 dias)</option>
+                                <option value="MCP-STM">Macapá/AP → Santarém/PA (2 dias)</option>
+                            </select>
+                        </div>
 
-<!-- Prévia do Cronograma -->
-<div id="previewSection" class="hidden bg-gray-50 p-4 rounded-lg border mb-4">
-<h4 class="font-bold text-gray-800 mb-3">Prévia do Cronograma e Cálculo:</h4>
-<div id="previewContent"></div>
-</div>
+                        <div>
+                            <label for="apresentacao" class="block text-sm font-medium text-gray-700 mb-2">Local de Apresentação:</label>
+                            <select id="apresentacao" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Selecione onde se apresentará</option>
+                                <option value="Destacamento Macapá/AP">Destacamento Macapá/AP</option>
+                                <option value="Sede Santarém/PA">Sede Santarém/PA</option>
+                            </select>
+                        </div>
+                    </div>
 
-<button type="submit" class="gradient-green text-white px-6 py-3 rounded-md font-bold hover:opacity-90 transition-opacity">Cadastrar Militar</button>
-</form>
-</div>
-</div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="dataSaidaOrigem" class="block text-sm font-medium text-gray-700 mb-2">Data de Saída da Origem:</label>
+                            <input type="date" id="dataSaidaOrigem" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
 
-<div id="alertSection" class="hidden bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
-<div class="p-6">
-<h3 class="text-xl font-bold text-red-800 mb-4 flex items-center">ALERTAS DO SISTEMA <span id="alertCount" class="bg-red-500 text-white text-sm px-2 py-1 rounded-full ml-3">0</span></h3>
-<div id="alertContent"></div>
-</div>
-</div>
+                        <div>
+                            <label for="dataChegadaDestino" class="block text-sm font-medium text-gray-700 mb-2">Chegada no Destino:</label>
+                            <input type="date" id="dataChegadaDestino" readonly 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                        </div>
 
-<div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
-<div class="p-6">
-<h3 class="text-2xl font-bold text-gray-800 mb-6">Estatísticas Gerais</h3>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-<div class="gradient-card p-4 rounded-lg text-center">
-<div id="totalMilitares" class="text-3xl font-bold text-green-600">0</div>
-<div class="text-gray-600 text-sm">Total
+                        <div>
+                            <label for="dataSaidaDestino" class="block text-sm font-medium text-gray-700 mb-2">Saída do Destino:</label>
+                            <input type="date" id="dataSaidaDestino" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                    </div>
+
+                    <!-- Prévia do Cronograma -->
+                    <div id="previewSection" class="hidden bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-gray-800 mb-3">Prévia do Cronograma e Cálculo:</h4>
+                        <div id="previewContent"></div>
+                    </div>
+
+                    <button type="submit" class="gradient-green text-white px-6 py-3 rounded-md font-bold hover:opacity-90 transition-opacity">
+                        Cadastrar Militar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Seção de Alertas -->
+        <div id="alertSection" class="hidden bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-red-800 mb-4 flex items-center">
+                    ALERTAS DO SISTEMA
+                    <span id="alertCount" class="bg-red-500 text-white text-sm px-2 py-1 rounded-full ml-3">0</span>
+                </h3>
+                <div id="alertContent"></div>
+            </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Estatísticas Gerais</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="gradient-card p-4 rounded-lg text-center">
+                        <div id="totalMilitares" class="text-3xl font-bold text-green-600">0</div>
+                        <div class="text-gray-600 text-sm">Total de Militares</div>
+                    </div>
+                    <div class="gradient-card p-4 rounded-lg text-center">
+                        <div id="emArejamento" class="text-3xl font-bold text-blue-600">0</div>
+                        <div class="text-gray-600 text-sm">Em Arejamento</div>
+                    </div>
+                    <div class="gradient-card p-4 rounded-lg text-center">
+                        <div id="arejamentoConcluido" class="text-3xl font-bold text-indigo-600">0</div>
+                        <div class="text-gray-600 text-sm">Concluído</div>
+                    </div>
+                    <div class="gradient-card p-4 rounded-lg text-center">
+                        <div id="aguardandoArejamento" class="text-3xl font-bold text-yellow-600">0</div>
+                        <div class="text-gray-600 text-sm">Aguardando</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Militares -->
+        <div class="bg-white rounded-lg shadow-xl animate-fade-in">
+            <div class="p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Militares Cadastrados</h3>
+                <div id="militaresList">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="empty-state-icon mb-4">📋</div>
+                        <p>Nenhum militar cadastrado ainda.</p>
+                        <p class="text-sm">Use o formulário acima para cadastrar o primeiro militar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Exportar Dados -->
+        <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6 text-center">
+                <h4 class="text-lg font-bold text-gray-800 mb-4">Exportar Dados</h4>
+                <div class="space-x-4">
+                    <button onclick="exportarPDF()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md font-bold transition-colors">
+                        Baixar PDF
+                    </button>
+                    <button onclick="exportarExcel()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-md font-bold transition-colors">
+                        Baixar Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    <!-- Notification Popup -->
+    <div id="notificationPopup" class="notification-popup"></div>
+
+    <script>
+        class SistemaArejamento {
+            constructor() {
+                this.militares = JSON.parse(localStorage.getItem('militares')) || [];
+                this.alertas = [];
+                this.init();
+            }
+
+            init() {
+                this.updateDateTime();
+                this.setupEventListeners();
+                this.renderMilitares();
+                this.updateStats();
+                this.checkAlerts();
+                
+                // Update datetime every second
+                setInterval(() => this.updateDateTime(), 1000);
+                
+                // Check alerts every minute
+                setInterval(() => this.checkAlerts(), 60000);
+            }
+
+            updateDateTime() {
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZone: 'America/Sao_Paulo'
+                };
+                document.getElementById('currentDateTime').textContent = 
+                    now.toLocaleDateString('pt-BR', options);
+            }
+
+            setupEventListeners() {
+                // Form submission
+                document.getElementById('militarForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.cadastrarMilitar();
+                });
+
+                // Auto-calculate arrival date when departure date changes
+                document.getElementById('dataSaidaOrigem').addEventListener('change', (e) => {
+                    this.calculateArrivalDate();
+                });
+
+                document.getElementById('tipoDeslocamento').addEventListener('change', (e) => {
+                    this.calculateArrivalDate();
+                });
+
+                // Show preview when departure destination date changes
+                document.getElementById('dataSaidaDestino').addEventListener('change', (e) => {
+                    this.showPreview();
+                });
+            }
+
+            calculateArrivalDate() {
+                const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
+                const tipoDeslocamento = document.getElementById('tipoDeslocamento').value;
+                
+                if (saidaOrigem && tipoDeslocamento) {
+                    const saida = new Date(saidaOrigem);
+                    const chegada = new Date(saida);
+                    chegada.setDate(saida.getDate() + 2); // 2 days travel time
+                    
+                    document.getElementById('dataChegadaDestino').value = 
+                        chegada.toISOString().split('T')[0];
+                    
+                    this.showPreview();
+                }
+            }
+
+            showPreview() {
+                const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
+                const chegadaDestino = document.getElementById('dataChegadaDestino').value;
+                const saidaDestino = document.getElementById('dataSaidaDestino').value;
+                
+                if (saidaOrigem && chegadaDestino && saidaDestino) {
+                    const calculo = this.calcularArejamento(chegadaDestino, saidaDestino);
+                    
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="font-bold text-gray-700 mb-2">Cronograma Completo:</h5>
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <strong>${this.formatDate(saidaOrigem)}</strong> - Saída da origem
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>${this.formatDate(chegadaDestino)}</strong> - Chegada no destino (início do serviço)
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>${this.formatDate(saidaDestino)}</strong> - Saída do destino (fim do serviço)
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>${this.formatDate(calculo.dataRetornoOrigem)}</strong> - Retorno à origem
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>${this.formatDate(calculo.inicioArejamento)}</strong> - Início do arejamento
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>${this.formatDate(calculo.fimArejamento)}</strong> - Fim do arejamento
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-700 mb-2">Cálculo do Arejamento:</h5>
+                                <div class="bg-yellow-50 p-3 rounded border-l-4 border-yellow-400">
+                                    <p><strong>Período de serviço:</strong> ${this.formatDate(chegadaDestino)} a ${this.formatDate(saidaDestino)}</p>
+                                    <p><strong>Dias de serviço (efetivos):</strong> ${calculo.diasServico} dias</p>
+                                    <p><strong>Dias de arejamento (direito):</strong> ${calculo.diasArejamento} dias</p>
+                                    <p><strong>Dias perdidos:</strong> ${calculo.diasPerdidos} dias</p>
+                                    <hr class="my-2">
+                                    <p class="text-sm text-gray-600">
+                                        <strong>Fórmula:</strong> ${calculo.diasServico} ÷ 5 = ${calculo.diasArejamento} 
+                                        (resto: ${calculo.diasPerdidos})
+                                    </p>
+                                    <p class="text-sm text-green-600 mt-2 font-semibold">
+                                        ✓ Período de arejamento: ${this.formatDate(calculo.inicioArejamento)} a ${this.formatDate(calculo.fimArejamento)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('previewSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('previewSection').classList.add('hidden');
+                }
+            }
+
+            calcularArejamento(chegada, saida) {
+                const dataChegada = new Date(chegada);
+                const dataSaida = new Date(saida);
+                
+                // Calculate service days (including first and last day)
+                const diffTime = Math.abs(dataSaida - dataChegada);
+                const diasServico = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // +1 to include both days
+                
+                // Calculate leave days (5 service days = 1 leave day)
+                const diasArejamento = Math.floor(diasServico / 5);
+                const diasPerdidos = diasServico % 5;
+                
+                // Calculate return date (2 days travel time)
+                const dataRetornoOrigem = new Date(dataSaida);
+                dataRetornoOrigem.setDate(dataSaida.getDate() + 2);
+                
+                // Calculate leave period (starts day after return)
+                const inicioArejamento = new Date(dataRetornoOrigem);
+                inicioArejamento.setDate(dataRetornoOrigem.getDate() + 1);
+                
+                // If no leave days, set same date for both start and end
+                let fimArejamento;
+                if (diasArejamento > 0) {
+                    fimArejamento = new Date(inicioArejamento);
+                    fimArejamento.setDate(inicioArejamento.getDate() + diasArejamento + 1);
+                } else {
+                    fimArejamento = new Date(inicioArejamento);
+                }
+                
+                return {
+                    diasServico,
+                    diasArejamento,
+                    diasPerdidos,
+                    dataRetornoOrigem: dataRetornoOrigem.toISOString().split('T')[0],
+                    inicioArejamento: inicioArejamento.toISOString().split('T')[0],
+                    fimArejamento: fimArejamento.toISOString().split('T')[0]
+                };
+            }
+
+            cadastrarMilitar() {
+                const formData = {
+                    id: Date.now(),
+                    nomeGuerra: document.getElementById('nomeGuerra').value,
+                    posto: document.getElementById('posto').value,
+                    tipoDeslocamento: document.getElementById('tipoDeslocamento').value,
+                    apresentacao: document.getElementById('apresentacao').value,
+                    dataSaidaOrigem: document.getElementById('dataSaidaOrigem').value,
+                    dataChegadaDestino: document.getElementById('dataChegadaDestino').value,
+                    dataSaidaDestino: document.getElementById('dataSaidaDestino').value,
+                    dataCadastro: new Date().toISOString().split('T')[0]
+                };
+
+                // Calculate leave period
+                const calculo = this.calcularArejamento(formData.dataChegadaDestino, formData.dataSaidaDestino);
+                formData.arejamento = calculo;
+                formData.status = this.determineStatus(calculo);
+
+                this.militares.push(formData);
+                localStorage.setItem('militares', JSON.stringify(this.militares));
+
+                this.showNotification('Militar cadastrado com sucesso!', 'success');
+                this.resetForm();
+                this.renderMilitares();
+                this.updateStats();
+                this.checkAlerts();
+            }
+
+            determineStatus(arejamento) {
+                const hoje = new Date().toISOString().split('T')[0];
+                const inicioArejamento = arejamento.inicioArejamento;
+                const fimArejamento = arejamento.fimArejamento;
+
+                if (arejamento.diasArejamento === 0) {
+                    return 'concluido'; // No leave days earned
+                } else if (hoje < inicioArejamento) {
+                    return 'aguardando';
+                } else if (hoje >= inicioArejamento && hoje <= fimArejamento) {
+                    return 'ativo';
+                } else {
+                    return 'concluido';
+                }
+            }
+
+            resetForm() {
+                document.getElementById('militarForm').reset();
+                document.getElementById('previewSection').classList.add('hidden');
+            }
+
+            renderMilitares() {
+                const container = document.getElementById('militaresList');
+                
+                if (this.militares.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <div class="empty-state-icon mb-4">📋</div>
+                            <p>Nenhum militar cadastrado ainda.</p>
+                            <p class="text-sm">Use o formulário acima para cadastrar o primeiro militar.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = this.militares.map(militar => {
+                    const statusClass = `status-${militar.status}`;
+                    const statusText = {
+                        'aguardando': 'Aguardando Arejamento',
+                        'ativo': 'Em Arejamento',
+                        'concluido': 'Concluído',
+                        'finalizado': 'Finalizado'
+                    }[militar.status];
+
+                    return `
+                        <div class="gradient-card p-6 rounded-lg mb-4 border border-gray-200">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-800">${militar.posto} ${militar.nomeGuerra}</h4>
+                                    <span class="status-badge ${statusClass}">${statusText}</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    ${militar.status === 'ativo' ? `
+                                        <button onclick="sistema.finalizarArejamento(${militar.id})" 
+                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                            Finalizar Arejamento
+                                        </button>
+                                    ` : ''}
+                                    <button onclick="sistema.excluirMilitar(${militar.id})" 
+                                        class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                                <div class="bg-white p-3 rounded border-l-4 border-green-500">
+                                    <strong class="text-green-700">Deslocamento:</strong><br>
+                                    ${militar.tipoDeslocamento === 'STM-MCP' ? 'Santarém → Macapá' : 'Macapá → Santarém'}
+                                </div>
+                                <div class="bg-white p-3 rounded border-l-4 border-blue-500">
+                                    <strong class="text-blue-700">Apresentação:</strong><br>
+                                    ${militar.apresentacao}
+                                </div>
+                                <div class="bg-white p-3 rounded border-l-4 border-purple-500">
+                                    <strong class="text-purple-700">Período Serviço:</strong><br>
+                                    ${this.formatDate(militar.dataChegadaDestino)} a ${this.formatDate(militar.dataSaidaDestino)}
+                                </div>
+                                <div class="bg-white p-3 rounded border-l-4 border-yellow-500">
+                                    <strong class="text-yellow-700">Dias de Serviço:</strong><br>
+                                    ${militar.arejamento.diasServico} dias
+                                </div>
+                                <div class="bg-white p-3 rounded border-l-4 border-indigo-500">
+                                    <strong class="text-indigo-700">Dias de Arejamento:</strong><br>
+                                    ${militar.arejamento.diasArejamento} dias
+                                    ${militar.arejamento.diasPerdidos > 0 ? `<span class="text-red-500 text-xs">(${militar.arejamento.diasPerdidos} perdidos)</span>` : ''}
+                                </div>
+                                <div class="bg-white p-3 rounded border-l-4 border-red-500">
+                                    <strong class="text-red-700">Período Arejamento:</strong><br>
+                                    ${militar.arejamento.diasArejamento > 0 ? 
+                                        `${this.formatDate(militar.arejamento.inicioArejamento)} a ${this.formatDate(militar.arejamento.fimArejamento)}` : 
+                                        'Sem direito a arejamento'
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-3 rounded">
+                                <h5 class="font-bold text-green-800 mb-2">Cronograma Completo:</h5>
+                                <div class="timeline text-sm">
+                                    <div class="timeline-item">
+                                        <span class="font-medium">${this.formatDate(militar.dataSaidaOrigem)}</span> - Saída da origem
+                                    </div>
+                                    <div class="timeline-item">
+                                        <span class="font-medium">${this.formatDate(militar.dataChegadaDestino)}</span> - Chegada no destino (início do serviço)
+                                    </div>
+                                    <div class="timeline-item">
+                                        <span class="font-medium">${this.formatDate(militar.dataSaidaDestino)}</span> - Saída do destino (fim do serviço)
+                                    </div>
+                                    <div class="timeline-item">
+                                        <span class="font-medium">${this.formatDate(militar.arejamento.dataRetornoOrigem)}</span> - Retorno à origem
+                                    </div>
+                                    ${militar.arejamento.diasArejamento > 0 ? `
+                                        <div class="timeline-item">
+                                            <span class="font-medium">${this.formatDate(militar.arejamento.inicioArejamento)}</span> - Início do arejamento
+                                        </div>
+                                        <div class="timeline-item">
+                                            <span class="font-medium">${this.formatDate(militar.arejamento.fimArejamento)}</span> - Fim do arejamento
+                                        </div>
+                                    ` : `
+                                        <div class="timeline-item">
+                                            <span class="font-medium text-red-600">Sem arejamento</span> - Não atingiu 5 dias de serviço
+                                        </div>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateStats() {
+                document.getElementById('totalMilitares').textContent = this.militares.length;
+                document.getElementById('emArejamento').textContent = this.militares.filter(m => m.status === 'ativo').length;
+                document.getElementById('arejamentoConcluido').textContent = this.militares.filter(m => m.status === 'concluido').length;
+                document.getElementById('aguardandoArejamento').textContent = this.militares.filter(m => m.status === 'aguardando').length;
+            }
+
+            checkAlerts() {
+                this.alertas = [];
+                const hoje = new Date().toISOString().split('T')[0];
+
+                this.militares.forEach(militar => {
+                    // Update status
+                    const novoStatus = this.determineStatus(militar.arejamento);
+                    if (militar.status !== novoStatus) {
+                        militar.status = novoStatus;
+                        localStorage.setItem('militares', JSON.stringify(this.militares));
+                    }
+
+                    // Only check alerts for militares with leave days
+                    if (militar.arejamento.diasArejamento > 0) {
+                        const inicioArejamento = new Date(militar.arejamento.inicioArejamento);
+                        const fimArejamento = new Date(militar.arejamento.fimArejamento);
+                        const hojeDate = new Date(hoje);
+
+                        // Alert for leave starting tomorrow
+                        const amanha = new Date(hojeDate);
+                        amanha.setDate(hojeDate.getDate() + 1);
+                        
+                        if (inicioArejamento.toISOString().split('T')[0] === amanha.toISOString().split('T')[0]) {
+                            this.alertas.push({
+                                tipo: 'inicio_arejamento',
+                                militar: militar,
+                                mensagem: `${militar.posto} ${militar.nomeGuerra} iniciará arejamento amanhã (${this.formatDate(militar.arejamento.inicioArejamento)})`
+                            });
+                        }
+
+                        // Alert for leave ending today
+                        if (fimArejamento.toISOString().split('T')[0] === hoje) {
+                            this.alertas.push({
+                                tipo: 'fim_arejamento',
+                                militar: militar,
+                                mensagem: `${militar.posto} ${militar.nomeGuerra} termina arejamento hoje (${this.formatDate(militar.arejamento.fimArejamento)})`
+                            });
+                        }
+
+                        // Alert for overdue return
+                        if (hojeDate > fimArejamento && militar.status !== 'finalizado') {
+                            const diasAtraso = Math.ceil((hojeDate - fimArejamento) / (1000 * 60 * 60 * 24));
+                            this.alertas.push({
+                                tipo: 'atraso',
+                                militar: militar,
+                                mensagem: `${militar.posto} ${militar.nomeGuerra} está ${diasAtraso} dia(s) em atraso no retorno do arejamento`
+                            });
+                        }
+                    }
+                });
+
+                this.renderAlerts();
+            }
+
+            renderAlerts() {
+                const alertSection = document.getElementById('alertSection');
+                const alertContent = document.getElementById('alertContent');
+                const alertCount = document.getElementById('alertCount');
+
+                if (this.alertas.length === 0) {
+                    alertSection.classList.add('hidden');
+                    return;
+                }
+
+                alertSection.classList.remove('hidden');
+                alertCount.textContent = this.alertas.length;
+
+                alertContent.innerHTML = this.alertas.map(alerta => `
+                    <div class="bg-white p-3 mb-2 rounded border-l-4 border-red-500">
+                        <strong class="text-red-800">${alerta.tipo.toUpperCase().replace('_', ' ')}:</strong> ${alerta.mensagem}
+                    </div>
+                `).join('');
+            }
+
+            finalizarArejamento(militarId) {
+                if (confirm('Tem certeza que deseja finalizar o arejamento deste militar?')) {
+                    const militar = this.militares.find(m => m.id === militarId);
+                    if (militar) {
+                        militar.status = 'finalizado';
+                        localStorage.setItem('militares', JSON.stringify(this.militares));
+                        this.showNotification('Arejamento finalizado com sucesso!', 'success');
+                        this.renderMilitares();
+                        this.updateStats();
+                        this.checkAlerts();
+                    }
+                }
+            }
+
+            excluirMilitar(militarId) {
+                if (confirm('Tem certeza que deseja excluir este militar do sistema?')) {
+                    this.militares = this.militares.filter(m => m.id !== militarId);
+                    localStorage.setItem('militares', JSON.stringify(this.militares));
+                    this.showNotification('Militar excluído com sucesso!', 'success');
+                    this.renderMilitares();
+                    this.updateStats();
+                    this.checkAlerts();
+                }
+            }
+
+            formatDate(dateString) {
+                return new Date(dateString).toLocaleDateString('pt-BR');
+            }
+
+            showNotification(message, type = 'success') {
+                const popup = document.getElementById('notificationPopup');
+                popup.className = `notification-popup notification-${type}`;
+                popup.textContent = message;
+                popup.classList.add('show');
+
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Export functions
+        function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(18);
+            doc.text('Relatorio de Arejamento - Exercito Brasileiro', 20, 30);
+            
+            doc.setFontSize(12);
+            let y = 50;
+            
+            sistema.militares.forEach((militar, index) => {
+                if (y > 250) {
+                    doc.addPage();
+                    y = 30;
+                }
+                
+                doc.text(`${index + 1}. ${militar.posto} ${militar.nomeGuerra}`, 20, y);
+                doc.text(`   Status: ${militar.status}`, 20, y + 10);
+                doc.text(`   Periodo de Servico: ${sistema.formatDate(militar.dataChegadaDestino)} a ${sistema.formatDate(militar.dataSaidaDestino)}`, 20, y + 20);
+                doc.text(`   Dias de Servico: ${militar.arejamento.diasServico} dias`, 20, y + 30);
+                doc.text(`   Dias de Arejamento: ${militar.arejamento.diasArejamento} dias`, 20, y + 40);
+                if (militar.arejamento.diasArejamento > 0) {
+                    doc.text(`   Periodo Arejamento: ${sistema.formatDate(militar.arejamento.inicioArejamento)} a ${sistema.formatDate(militar.arejamento.fimArejamento)}`, 20, y + 50);
+                } else {
+                    doc.text(`   Sem direito a arejamento`, 20, y + 50);
+                }
+                
+                y += 70;
+            });
+            
+            doc.save('relatorio-arejamento.pdf');
+            sistema.showNotification('PDF exportado com sucesso!', 'success');
+        }
+
+        function exportarExcel() {
+            const dados = sistema.militares.map(militar => ({
+                'Nome de Guerra': militar.nomeGuerra,
+                'Posto': militar.posto,
+                'Status': militar.status,
+                'Tipo Deslocamento': militar.tipoDeslocamento,
+                'Local Apresentacao': militar.apresentacao,
+                'Data Saida Origem': militar.dataSaidaOrigem,
+                'Data Chegada Destino': militar.dataChegadaDestino,
+                'Data Saida Destino': militar.dataSaidaDestino,
+                'Dias de Servico': militar.arejamento.diasServico,
+                'Dias de Arejamento': militar.arejamento.diasArejamento,
+                'Dias Perdidos': militar.arejamento.diasPerdidos,
+                'Inicio Arejamento': militar.arejamento.diasArejamento > 0 ? militar.arejamento.inicioArejamento : 'N/A',
+                'Fim Arejamento': militar.arejamento.diasArejamento > 0 ? militar.arejamento.fimArejamento : 'N/A',
+                'Data Cadastro': militar.dataCadastro
+            }));
+            
+            const ws = XLSX.utils.json_to_sheet(dados);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Militares');
+            
+            XLSX.writeFile(wb, 'arejamento-militares.xlsx');
+            sistema.showNotification('Excel exportado com sucesso!', 'success');
+        }
+
+        // Initialize system
+        const sistema = new SistemaArejamento();
+    </script>
+</body>
+</html>
