@@ -356,8 +356,7 @@
                     const saida = new Date(saidaOrigem);
                     const chegada = new Date(saida);
                     chegada.setDate(saida.getDate() + 2);
-                    
-                    document.getElementById('dataChegadaDestino').value = chegada.toISOString().split('T')[0];
+                    document.getElementById('dataChegadaDestino').value = this.toLocalISO(chegada);
                     this.showPreview();
                 }
             }
