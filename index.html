@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,118 +8,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        }
-        
-        .gradient-green {
-            background: linear-gradient(135deg, #0f4c3a 0%, #1a7a5e 100%);
-        }
-
-        .gradient-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
+        .gradient-bg { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+        .gradient-green { background: linear-gradient(135deg, #0f4c3a 0%, #1a7a5e 100%); }
+        .gradient-card { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
         .status-ativo { background: #d4edda; color: #155724; }
         .status-aguardando { background: #fff3cd; color: #856404; }
         .status-concluido { background: #d1ecf1; color: #0c5460; }
         .status-finalizado { background: #f8d7da; color: #721c24; }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 15px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 10px;
-            top: 8px;
-            width: 10px;
-            height: 10px;
-            background: #1a7a5e;
-            border-radius: 50%;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 14px;
-            top: 18px;
-            width: 2px;
-            height: 100%;
-            background: #dee2e6;
-        }
-
-        .timeline-item:last-child::after {
-            display: none;
-        }
-
-        .notification-popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            max-width: 350px;
-            padding: 15px;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .notification-popup.show {
-            transform: translateX(0);
-        }
-
+        .timeline-item { position: relative; padding-left: 30px; margin-bottom: 15px; }
+        .timeline-item::before { content: ''; position: absolute; left: 10px; top: 8px; width: 10px; height: 10px; background: #1a7a5e; border-radius: 50%; }
+        .timeline-item::after { content: ''; position: absolute; left: 14px; top: 18px; width: 2px; height: 100%; background: #dee2e6; }
+        .timeline-item:last-child::after { display: none; }
+        .notification-popup { position: fixed; top: 20px; right: 20px; z-index: 1000; max-width: 350px; padding: 15px; border-radius: 8px; color: white; font-weight: bold; transform: translateX(100%); transition: transform 0.3s ease; }
+        .notification-popup.show { transform: translateX(0); }
         .notification-success { background: #28a745; }
         .notification-error { background: #dc3545; }
         .notification-warning { background: #ffc107; color: #000; }
-
-        .army-emblem {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 24px;
-            margin: 0 auto;
-        }
-
-        .empty-state-icon {
-            width: 200px;
-            height: 150px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            font-size: 48px;
-            margin: 0 auto;
-        }
+        .army-emblem { width: 80px; height: 80px; background: linear-gradient(135deg, #228B22 0%, #32CD32 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px; margin: 0 auto; }
+        .empty-state-icon { width: 200px; height: 150px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 48px; margin: 0 auto; }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -135,212 +43,114 @@
     </header>
 
     <div class="container mx-auto px-4 py-8">
+        <!-- Formulário de Cadastro -->
+        <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Cadastro de Militar</h3>
+                
+                <!-- Critério de Arejamento -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <div class="font-bold text-yellow-800 mb-2">CRITÉRIO OBRIGATÓRIO DE AREJAMENTO</div>
+                    <ul class="text-yellow-700 space-y-1">
+                        <li><strong>Para cada 5 dias completos de serviço = 1 dia de arejamento</strong></li>
+                        <li>Exemplo: 23 dias de serviço = 4 dias de arejamento (3 dias perdidos)</li>
+                        <li>Exemplo: 25 dias de serviço = 5 dias de arejamento (divisão exata)</li>
+                        <li><strong>SISTEMA AUTOMÁTICO:</strong> O arejamento inicia automaticamente na data prevista</li>
+                    </ul>
+                </div>
 
-    <!-- Formulário de Cadastro -->
+                <form id="militarForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nomeGuerra" class="block text-sm font-medium text-gray-700 mb-2">Nome de Guerra:</label>
+                            <input type="text" id="nomeGuerra" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                placeholder="Digite o nome de guerra">
+                        </div>
 
-    <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+                        <div>
+                            <label for="posto" class="block text-sm font-medium text-gray-700 mb-2">Posto/Graduação:</label>
+                            <select id="posto" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Selecione</option>
+                                <option value="SD">Soldado</option>
+                                <option value="CB">Cabo</option>
+                                <option value="3º SGT">3º Sargento</option>
+                                <option value="2º SGT">2º Sargento</option>
+                                <option value="1º SGT">1º Sargento</option>
+                                <option value="ST">Subtenente</option>
+                                <option value="2º TEN">2º Tenente</option>
+                                <option value="1º TEN">1º Tenente</option>
+                                <option value="CAP">Capitão</option>
+                                <option value="MAJ">Major</option>
+                                <option value="TC">Tenente Coronel</option>
+                                <option value="CEL">Coronel</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <div class="p-6 border-b border-gray-200">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="tipoDeslocamento" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Deslocamento:</label>
+                            <select id="tipoDeslocamento" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Selecione o deslocamento</option>
+                                <option value="STM-MCP">Santarém/PA → Macapá/AP (2 dias)</option>
+                                <option value="MCP-STM">Macapá/AP → Santarém/PA (2 dias)</option>
+                            </select>
+                        </div>
 
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Cadastro de Militar</h3>
+                        <div>
+                            <label for="apresentacao" class="block text-sm font-medium text-gray-700 mb-2">Local de Apresentação:</label>
+                            <select id="apresentacao" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Selecione onde se apresentará</option>
+                                <option value="Destacamento Macapá/AP">Destacamento Macapá/AP</option>
+                                <option value="Sede Santarém/PA">Sede Santarém/PA</option>
+                            </select>
+                        </div>
+                    </div>
 
-            
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="dataSaidaOrigem" class="block text-sm font-medium text-gray-700 mb-2">Data de Saída da Origem:</label>
+                            <input type="date" id="dataSaidaOrigem" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
 
-            <!-- Critério de Arejamento -->
+                        <div>
+                            <label for="dataChegadaDestino" class="block text-sm font-medium text-gray-700 mb-2">Chegada no Destino:</label>
+                            <input type="date" id="dataChegadaDestino" readonly 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                        </div>
 
-            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                        <div>
+                            <label for="dataSaidaDestino" class="block text-sm font-medium text-gray-700 mb-2">Saída do Destino:</label>
+                            <input type="date" id="dataSaidaDestino" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                    </div>
 
-                <div class="font-bold text-yellow-800 mb-2">CRITÉRIO OBRIGATÓRIO DE AREJAMENTO</div>
+                    <!-- Prévia do Cronograma -->
+                    <div id="previewSection" class="hidden bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-gray-800 mb-3">Prévia do Cronograma e Cálculo:</h4>
+                        <div id="previewContent"></div>
+                    </div>
 
-                <ul class="text-yellow-700 space-y-1">
-
-                    <li><strong>Para cada 5 dias completos de serviço = 1 dia de arejamento</strong></li>
-
-                    <li>Exemplo: 23 dias de serviço = 4 dias de arejamento (3 dias perdidos)</li>
-
-                    <li>Exemplo: 25 dias de serviço = 5 dias de arejamento (divisão exata)</li>
-
-                    <li><strong>SISTEMA AUTOMÁTICO:</strong> O arejamento inicia automaticamente na data prevista</li>
-
-                </ul>
-
+                    <button type="submit" class="gradient-green text-white px-6 py-3 rounded-md font-bold hover:opacity-90 transition-opacity">
+                        Cadastrar Militar
+                    </button>
+                </form>
             </div>
-
-
-            <form id="militarForm" class="space-y-6">
-
-                <div class="grid md:grid-cols-2 gap-6">
-
-                    <div>
-
-                        <label for="nomeGuerra" class="block text-sm font-medium text-gray-700 mb-2">Nome de Guerra:</label>
-
-                        <input type="text" id="nomeGuerra" required 
-
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-
-                            placeholder="Digite o nome de guerra">
-
-                    </div>
-
-
-                    <div>
-
-                        <label for="posto" class="block text-sm font-medium text-gray-700 mb-2">Posto/Graduação:</label>
-
-                        <select id="posto" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-
-                            <option value="">Selecione</option>
-
-                            <option value="SD">Soldado</option>
-
-                            <option value="CB">Cabo</option>
-
-                            <option value="3º SGT">3º Sargento</option>
-
-                            <option value="2º SGT">2º Sargento</option>
-
-                            <option value="1º SGT">1º Sargento</option>
-
-                            <option value="ST">Subtenente</option>
-
-                            <option value="2º TEN">2º Tenente</option>
-
-                            <option value="1º TEN">1º Tenente</option>
-
-                            <option value="CAP">Capitão</option>
-
-                            <option value="MAJ">Major</option>
-
-                            <option value="TC">Tenente Coronel</option>
-
-                            <option value="CEL">Coronel</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="grid md:grid-cols-2 gap-6">
-
-                    <div>
-
-                        <label for="tipoDeslocamento" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Deslocamento:</label>
-
-                        <select id="tipoDeslocamento" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-
-                            <option value="">Selecione o deslocamento</option>
-
-                            <option value="STM-MCP">Santarém/PA → Macapá/AP (2 dias)</option>
-
-                            <option value="MCP-STM">Macapá/AP → Santarém/PA (2 dias)</option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div>
-
-                        <label for="apresentacao" class="block text-sm font-medium text-gray-700 mb-2">Local de Apresentação:</label>
-
-                        <select id="apresentacao" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-
-                            <option value="">Selecione onde se apresentará</option>
-
-                            <option value="Destacamento Macapá/AP">Destacamento Macapá/AP</option>
-
-                            <option value="Sede Santarém/PA">Sede Santarém/PA</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="grid md:grid-cols-3 gap-6">
-
-                    <div>
-
-                        <label for="dataSaidaOrigem" class="block text-sm font-medium text-gray-700 mb-2">Data de Saída da Origem:</label>
-
-                        <input type="date" id="dataSaidaOrigem" required 
-
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-
-                    </div>
-
-
-                    <div>
-
-                        <label for="dataChegadaDestino" class="block text-sm font-medium text-gray-700 mb-2">Chegada no Destino:</label>
-
-                        <input type="date" id="dataChegadaDestino" readonly 
-
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
-
-                    </div>
-
-
-                    <div>
-
-                        <label for="dataSaidaDestino" class="block text-sm font-medium text-gray-700 mb-2">Saída do Destino:</label>
-
-                        <input type="date" id="dataSaidaDestino" required 
-
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-
-                    </div>
-
-                </div>
-
-
-                <!-- Prévia do Cronograma -->
-
-                <div id="previewSection" class="hidden bg-gray-50 p-4 rounded-lg border">
-
-                    <h4 class="font-bold text-gray-800 mb-3">Prévia do Cronograma e Cálculo:</h4>
-
-                    <div id="previewContent"></div>
-
-                </div>
-
-
-                <button type="submit" class="gradient-green text-white px-6 py-3 rounded-md font-bold hover:opacity-90 transition-opacity">
-
-                    Cadastrar Militar
-
-                </button>
-
-            </form>
-
         </div>
 
-    </div>
-
-
-    <!-- Seção de Alertas -->
-
-    <div id="alertSection" class="hidden bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
-
-        <div class="p-6">
-
-            <h3 class="text-xl font-bold text-red-800 mb-4 flex items-center">
-
-                ALERTAS DO SISTEMA
-
-                <span id="alertCount" class="bg-red-500 text-white text-sm px-2 py-1 rounded-full ml-3">0</span>
-
-            </h3>
-
-            <div id="alertContent"></div>
-
+        <!-- Seção de Alertas -->
+        <div id="alertSection" class="hidden bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-red-800 mb-4 flex items-center">
+                    ALERTAS DO SISTEMA
+                    <span id="alertCount" class="bg-red-500 text-white text-sm px-2 py-1 rounded-full ml-3">0</span>
+                </h3>
+                <div id="alertContent"></div>
+            </div>
         </div>
-
-    </div>
 
         <!-- Estatísticas -->
         <div class="bg-white rounded-lg shadow-xl mb-8 animate-fade-in">
@@ -408,13 +218,39 @@
                 this.init();
             }
 
+            /* ===== Helpers de data (sempre em horário local) ===== */
+            parseLocalDate(yyyyMmDd) {
+                const [y, m, d] = yyyyMmDd.split('-').map(Number);
+                return new Date(y, m - 1, d);
+            }
+            toLocalISO(date) {
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+            addDays(date, days) {
+                const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                d.setDate(d.getDate() + days);
+                return d;
+            }
+            daysBetweenInclusive(startDate, endDate) {
+                const s = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+                const e = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+                const diffMs = e - s;
+                return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+            }
+            formatDate(yyyyMmDd) {
+                return this.parseLocalDate(yyyyMmDd).toLocaleDateString('pt-BR');
+            }
+
+            /* ===== Inicialização ===== */
             init() {
                 this.updateDateTime();
                 this.setupEventListeners();
                 this.renderMilitares();
                 this.updateStats();
                 this.checkAlerts();
-                
                 setInterval(() => this.updateDateTime(), 1000);
                 setInterval(() => this.checkAlerts(), 60000);
             }
@@ -422,13 +258,8 @@
             updateDateTime() {
                 const now = new Date();
                 const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
                     timeZone: 'America/Sao_Paulo'
                 };
                 document.getElementById('currentDateTime').textContent = 
@@ -446,71 +277,50 @@
                 document.getElementById('dataSaidaDestino').addEventListener('change', () => this.showPreview());
             }
 
+            /* ===== Lógica de datas do formulário ===== */
             calculateArrivalDate() {
                 const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
                 const tipoDeslocamento = document.getElementById('tipoDeslocamento').value;
                 
                 if (saidaOrigem && tipoDeslocamento) {
-                    const saida = new Date(saidaOrigem);
-                    const chegada = new Date(saida);
-                    chegada.setDate(saida.getDate() + 2);
+                    const saida = this.parseLocalDate(saidaOrigem);
+                    const chegada = this.addDays(saida, 2); // 2 dias de deslocamento
                     document.getElementById('dataChegadaDestino').value = this.toLocalISO(chegada);
                     this.showPreview();
                 }
             }
 
-            showPreview() {
-                const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
-                const chegadaDestino = document.getElementById('dataChegadaDestino').value;
-                const saidaDestino = document.getElementById('dataSaidaDestino').value;
-                
-                if (saidaOrigem && chegadaDestino && saidaDestino) {
-                    const calculo = this.calcularArejamento(chegadaDestino, saidaDestino);
-                    document.getElementById('previewContent').innerHTML = `...`; // Mesma estrutura de preview
-                    document.getElementById('previewSection').classList.remove('hidden');
-                } else {
-                    document.getElementById('previewSection').classList.add('hidden');
-                }
+            calcularArejamento(chegadaYYYYMMDD, saidaYYYYMMDD) {
+                const dataChegada = this.parseLocalDate(chegadaYYYYMMDD);
+                const dataSaida = this.parseLocalDate(salidaYYYYMMDD = saidaYYYYMMDD);
+
+                // 1) Dias de serviço (contando início e fim)
+                const diasServico = this.daysBetweenInclusive(dataChegada, dataSaida);
+
+                // 2) 5 dias de serviço = 1 de arejamento
+                const diasArejamento = Math.floor(diasServico / 5);
+                const diasPerdidos = diasServico % 5;
+
+                // 3) Retorno à origem = saída do destino + 2 dias
+                const dataRetornoOrigem = this.addDays(dataSaida, 2);
+
+                // 4) Início do arejamento = dia seguinte ao retorno
+                const inicioArejamento = this.addDays(dataRetornoOrigem, 1);
+
+                // 5) Fim do arejamento (N dias = início + (N-1))
+                const fimArejamento = diasArejamento > 0
+                    ? this.addDays(inicioArejamento, diasArejamento - 1)
+                    : new Date(inicioArejamento);
+
+                return {
+                    diasServico,
+                    diasArejamento,
+                    diasPerdidos,
+                    dataRetornoOrigem: this.toLocalISO(dataRetornoOrigem),
+                    inicioArejamento: this.toLocalISO(inicioArejamento),
+                    fimArejamento: this.toLocalISO(fimArejamento)
+                };
             }
-
-            calcularArejamento(chegada, saida) {
-    const dataChegada = new Date(chegada);
-    const dataSaida = new Date(saida);
-
-    // 1️⃣ Dias de serviço (inclui último dia)
-    const diffTime = Math.abs(dataSaida - dataChegada);
-    const diasServico = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-    // 2️⃣ Dias de arejamento (5 dias de serviço = 1 dia de arejamento)
-    const diasArejamento = Math.floor(diasServico / 5);
-    const diasPerdidos = diasServico % 5;
-
-    // 3️⃣ Retorno à origem (2 dias de deslocamento)
-    const dataRetornoOrigem = new Date(dataSaida);
-    dataRetornoOrigem.setDate(dataSaida.getDate() + 2);
-
-    // 4️⃣ Início do arejamento (dia seguinte ao retorno)
-    const inicioArejamento = new Date(dataRetornoOrigem);
-    inicioArejamento.setDate(dataRetornoOrigem.getDate() + 1);
-
-    // 5️⃣ Fim do arejamento
-    let fimArejamento;
-    if (diasArejamento > 0) {
-        fimArejamento = new Date(inicioArejamento);
-        fimArejamento.setDate(inicioArejamento.getDate() + diasArejamento - 1);
-    } else {
-        fimArejamento = new Date(inicioArejamento);
-    }
-
-    return {
-        diasServico,
-        diasArejamento,
-        diasPerdidos,
-        dataRetornoOrigem: dataRetornoOrigem.toISOString().split('T')[0],
-        inicioArejamento: inicioArejamento.toISOString().split('T')[0],
-        fimArejamento: fimArejamento.toISOString().split('T')[0]
-    };
-}
 
             showPreview() {
                 const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
@@ -564,52 +374,13 @@
                             </div>
                         </div>
                     `;
-                    
                     document.getElementById('previewSection').classList.remove('hidden');
                 } else {
                     document.getElementById('previewSection').classList.add('hidden');
                 }
             }
 
-            calcularArejamento(chegada, saida) {
-                const dataChegada = new Date(chegada);
-                const dataSaida = new Date(saida);
-                
-                // Calculate service days (including first and last day)
-                const diffTime = Math.abs(dataSaida - dataChegada);
-                const diasServico = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1 ; // +1 to include both days
-                
-                // Calculate leave days (5 service days = 1 leave day)
-                const diasArejamento = Math.floor(diasServico / 5);
-                const diasPerdidos = diasServico % 5;
-                
-                // Calculate return date (2 days travel time)
-                const dataRetornoOrigem = new Date(dataSaida);
-                dataRetornoOrigem.setDate(dataSaida.getDate() + 2);
-                
-                // Calculate leave period (starts day after return)
-                const inicioArejamento = new Date(dataRetornoOrigem);
-                inicioArejamento.setDate(dataRetornoOrigem.getDate() + 1);
-                
-                // If no leave days, set same date for both start and end
-                let fimArejamento;
-                if (diasArejamento > 0) {
-                    fimArejamento = new Date(inicioArejamento);
-                    fimArejamento.setDate(inicioArejamento.getDate() + diasArejamento + 1);
-                } else {
-                    fimArejamento = new Date(inicioArejamento);
-                }
-                
-                return {
-                    diasServico,
-                    diasArejamento,
-                    diasPerdidos,
-                    dataRetornoOrigem: dataRetornoOrigem.toISOString().split('T')[0],
-                    inicioArejamento: inicioArejamento.toISOString().split('T')[0],
-                    fimArejamento: fimArejamento.toISOString().split('T')[0]
-                };
-            }
-
+            /* ===== Cadastro e renderização ===== */
             cadastrarMilitar() {
                 const formData = {
                     id: Date.now(),
@@ -620,10 +391,9 @@
                     dataSaidaOrigem: document.getElementById('dataSaidaOrigem').value,
                     dataChegadaDestino: document.getElementById('dataChegadaDestino').value,
                     dataSaidaDestino: document.getElementById('dataSaidaDestino').value,
-                    dataCadastro: new Date().toISOString().split('T')[0]
+                    dataCadastro: this.toLocalISO(new Date())
                 };
 
-                // Calculate leave period
                 const calculo = this.calcularArejamento(formData.dataChegadaDestino, formData.dataSaidaDestino);
                 formData.arejamento = calculo;
                 formData.status = this.determineStatus(calculo);
@@ -639,19 +409,14 @@
             }
 
             determineStatus(arejamento) {
-                const hoje = new Date().toISOString().split('T')[0];
-                const inicioArejamento = arejamento.inicioArejamento;
-                const fimArejamento = arejamento.fimArejamento;
+                const hoje = this.toLocalISO(new Date());
+                const inicio = arejamento.inicioArejamento;
+                const fim = arejamento.fimArejamento;
 
-                if (arejamento.diasArejamento === 0) {
-                    return 'concluido'; // No leave days earned
-                } else if (hoje < inicioArejamento) {
-                    return 'aguardando';
-                } else if (hoje >= inicioArejamento && hoje <= fimArejamento) {
-                    return 'ativo';
-                } else {
-                    return 'concluido';
-                }
+                if (arejamento.diasArejamento === 0) return 'concluido';
+                if (hoje < inicio) return 'aguardando';
+                if (hoje >= inicio && hoje <= fim) return 'ativo';
+                return 'concluido';
             }
 
             resetForm() {
@@ -775,51 +540,47 @@
                 document.getElementById('aguardandoArejamento').textContent = this.militares.filter(m => m.status === 'aguardando').length;
             }
 
+            /* ===== Alertas ===== */
             checkAlerts() {
                 this.alertas = [];
-                const hoje = new Date().toISOString().split('T')[0];
+                const hojeISO = this.toLocalISO(new Date());
+                const hojeDate = this.parseLocalDate(hojeISO);
 
                 this.militares.forEach(militar => {
-                    // Update status
+                    // Atualiza status
                     const novoStatus = this.determineStatus(militar.arejamento);
                     if (militar.status !== novoStatus) {
                         militar.status = novoStatus;
                         localStorage.setItem('militares', JSON.stringify(this.militares));
                     }
 
-                    // Only check alerts for militares with leave days
                     if (militar.arejamento.diasArejamento > 0) {
-                        const inicioArejamento = new Date(militar.arejamento.inicioArejamento);
-                        const fimArejamento = new Date(militar.arejamento.fimArejamento);
-                        const hojeDate = new Date(hoje);
+                        const inicio = this.parseLocalDate(militar.arejamento.inicioArejamento);
+                        const fim = this.parseLocalDate(militar.arejamento.fimArejamento);
 
-                        // Alert for leave starting tomorrow
-                        const amanha = new Date(hojeDate);
-                        amanha.setDate(hojeDate.getDate() + 1);
-                        
-                        if (inicioArejamento.toISOString().split('T')[0] === amanha.toISOString().split('T')[0]) {
+                        const amanha = this.addDays(hojeDate, 1);
+
+                        if (this.toLocalISO(inicio) === this.toLocalISO(amanha)) {
                             this.alertas.push({
                                 tipo: 'inicio_arejamento',
-                                militar: militar,
+                                militar,
                                 mensagem: `${militar.posto} ${militar.nomeGuerra} iniciará arejamento amanhã (${this.formatDate(militar.arejamento.inicioArejamento)})`
                             });
                         }
 
-                        // Alert for leave ending today
-                        if (fimArejamento.toISOString().split('T')[0] === hoje) {
+                        if (this.toLocalISO(fim) === hojeISO) {
                             this.alertas.push({
                                 tipo: 'fim_arejamento',
-                                militar: militar,
+                                militar,
                                 mensagem: `${militar.posto} ${militar.nomeGuerra} termina arejamento hoje (${this.formatDate(militar.arejamento.fimArejamento)})`
                             });
                         }
 
-                        // Alert for overdue return
-                        if (hojeDate > fimArejamento && militar.status !== 'finalizado') {
-                            const diasAtraso = Math.ceil((hojeDate - fimArejamento) / (1000 * 60 * 60 * 24));
+                        if (hojeDate > fim && militar.status !== 'finalizado') {
+                            const diasAtraso = Math.ceil((hojeDate - fim) / (1000 * 60 * 60 * 24));
                             this.alertas.push({
                                 tipo: 'atraso',
-                                militar: militar,
+                                militar,
                                 mensagem: `${militar.posto} ${militar.nomeGuerra} está ${diasAtraso} dia(s) em atraso no retorno do arejamento`
                             });
                         }
@@ -874,53 +635,40 @@
                 }
             }
 
-            formatDate(dateString) {
-                return new Date(dateString).toLocaleDateString('pt-BR');
-            }
-
             showNotification(message, type = 'success') {
                 const popup = document.getElementById('notificationPopup');
                 popup.className = `notification-popup notification-${type}`;
                 popup.textContent = message;
                 popup.classList.add('show');
-
-                setTimeout(() => {
-                    popup.classList.remove('show');
-                }, 3000);
+                setTimeout(() => popup.classList.remove('show'), 3000);
             }
         }
 
-        // Export functions
+        // Exportações
         function exportarPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
             doc.setFontSize(18);
-            doc.text('Relatorio de Arejamento - Exercito Brasileiro', 20, 30);
-            
+            doc.text('Relatório de Arejamento - Exército Brasileiro', 20, 30);
             doc.setFontSize(12);
             let y = 50;
-            
+
             sistema.militares.forEach((militar, index) => {
-                if (y > 250) {
-                    doc.addPage();
-                    y = 30;
-                }
-                
+                if (y > 250) { doc.addPage(); y = 30; }
+
                 doc.text(`${index + 1}. ${militar.posto} ${militar.nomeGuerra}`, 20, y);
                 doc.text(`   Status: ${militar.status}`, 20, y + 10);
-                doc.text(`   Periodo de Servico: ${sistema.formatDate(militar.dataChegadaDestino)} a ${sistema.formatDate(militar.dataSaidaDestino)}`, 20, y + 20);
-                doc.text(`   Dias de Servico: ${militar.arejamento.diasServico} dias`, 20, y + 30);
-                doc.text(`   Dias de Arejamento: ${militar.arejamento.diasArejamento} dias`, 20, y + 40);
+                doc.text(`   Período de Serviço: ${sistema.formatDate(militar.dataChegadaDestino)} a ${sistema.formatDate(militar.dataSaidaDestino)}`, 20, y + 20);
+                doc.text(`   Dias de Serviço: ${militar.arejamento.diasServico} dia(s)`, 20, y + 30);
+                doc.text(`   Dias de Arejamento: ${militar.arejamento.diasArejamento} dia(s)`, 20, y + 40);
                 if (militar.arejamento.diasArejamento > 0) {
-                    doc.text(`   Periodo Arejamento: ${sistema.formatDate(militar.arejamento.inicioArejamento)} a ${sistema.formatDate(militar.arejamento.fimArejamento)}`, 20, y + 50);
+                    doc.text(`   Período de Arejamento: ${sistema.formatDate(militar.arejamento.inicioArejamento)} a ${sistema.formatDate(militar.arejamento.fimArejamento)}`, 20, y + 50);
                 } else {
                     doc.text(`   Sem direito a arejamento`, 20, y + 50);
                 }
-                
                 y += 70;
             });
-            
+
             doc.save('relatorio-arejamento.pdf');
             sistema.showNotification('PDF exportado com sucesso!', 'success');
         }
@@ -946,12 +694,11 @@
             const ws = XLSX.utils.json_to_sheet(dados);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Militares');
-            
             XLSX.writeFile(wb, 'arejamento-militares.xlsx');
             sistema.showNotification('Excel exportado com sucesso!', 'success');
         }
 
-        // Initialize system
+        // Inicializa o sistema
         const sistema = new SistemaArejamento();
     </script>
 </body>
