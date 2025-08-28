@@ -317,10 +317,7 @@
                 this.updateStats();
                 this.checkAlerts();
                 
-                // Update datetime every second
                 setInterval(() => this.updateDateTime(), 1000);
-                
-                // Check alerts every minute
                 setInterval(() => this.checkAlerts(), 60000);
             }
 
@@ -341,25 +338,14 @@
             }
 
             setupEventListeners() {
-                // Form submission
                 document.getElementById('militarForm').addEventListener('submit', (e) => {
                     e.preventDefault();
                     this.cadastrarMilitar();
                 });
 
-                // Auto-calculate arrival date when departure date changes
-                document.getElementById('dataSaidaOrigem').addEventListener('change', (e) => {
-                    this.calculateArrivalDate();
-                });
-
-                document.getElementById('tipoDeslocamento').addEventListener('change', (e) => {
-                    this.calculateArrivalDate();
-                });
-
-                // Show preview when departure destination date changes
-                document.getElementById('dataSaidaDestino').addEventListener('change', (e) => {
-                    this.showPreview();
-                });
+                document.getElementById('dataSaidaOrigem').addEventListener('change', () => this.calculateArrivalDate());
+                document.getElementById('tipoDeslocamento').addEventListener('change', () => this.calculateArrivalDate());
+                document.getElementById('dataSaidaDestino').addEventListener('change', () => this.showPreview());
             }
 
             calculateArrivalDate() {
@@ -369,13 +355,59 @@
                 if (saidaOrigem && tipoDeslocamento) {
                     const saida = new Date(saidaOrigem);
                     const chegada = new Date(saida);
-                    chegada.setDate(saida.getDate() + 2); // 2 days travel time
+                    chegada.setDate(saida.getDate() + 2);
                     
-                    document.getElementById('dataChegadaDestino').value = 
-                        chegada.toISOString().split('T')[0];
-                    
+                    document.getElementById('dataChegadaDestino').value = chegada.toISOString().split('T')[0];
                     this.showPreview();
                 }
+            }
+
+            showPreview() {
+                const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
+                const chegadaDestino = document.getElementById('dataChegadaDestino').value;
+                const saidaDestino = document.getElementById('dataSaidaDestino').value;
+                
+                if (saidaOrigem && chegadaDestino && saidaDestino) {
+                    const calculo = this.calcularArejamento(chegadaDestino, saidaDestino);
+                    document.getElementById('previewContent').innerHTML = `...`; // Mesma estrutura de preview
+                    document.getElementById('previewSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('previewSection').classList.add('hidden');
+                }
+            }
+
+            calcularArejamento(chegada, saida) {
+                const dataChegada = new Date(chegada);
+                const dataSaida = new Date(saida);
+                
+                const diffTime = Math.abs(dataSaida - dataChegada);
+                const diasServico = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                
+                const diasArejamento = Math.floor(diasServico / 5);
+                const diasPerdidos = diasServico % 5;
+                
+                const dataRetornoOrigem = new Date(dataSaida);
+                dataRetornoOrigem.setDate(dataSaida.getDate() + 2);
+                
+                const inicioArejamento = new Date(dataRetornoOrigem);
+                inicioArejamento.setDate(dataRetornoOrigem.getDate() + 1);
+                
+                let fimArejamento;
+                if (diasArejamento > 0) {
+                    fimArejamento = new Date(inicioArejamento);
+                    fimArejamento.setDate(inicioArejamento.getDate() + diasArejamento - 1); // <-- corrigido
+                } else {
+                    fimArejamento = new Date(inicioArejamento);
+                }
+                
+                return {
+                    diasServico,
+                    diasArejamento,
+                    diasPerdidos,
+                    dataRetornoOrigem: dataRetornoOrigem.toISOString().split('T')[0],
+                    inicioArejamento: inicioArejamento.toISOString().split('T')[0],
+                    fimArejamento: fimArejamento.toISOString().split('T')[0]
+                };
             }
 
             showPreview() {
