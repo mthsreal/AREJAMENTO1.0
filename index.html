@@ -377,38 +377,43 @@
             }
 
             calcularArejamento(chegada, saida) {
-                const dataChegada = new Date(chegada);
-                const dataSaida = new Date(saida);
-                
-                const diffTime = Math.abs(dataSaida - dataChegada);
-                const diasServico = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                
-                const diasArejamento = Math.floor(diasServico / 5);
-                const diasPerdidos = diasServico % 5;
-                
-                const dataRetornoOrigem = new Date(dataSaida);
-                dataRetornoOrigem.setDate(dataSaida.getDate() + 2);
-                
-                const inicioArejamento = new Date(dataRetornoOrigem);
-                inicioArejamento.setDate(dataRetornoOrigem.getDate() + 1);
-                
-                let fimArejamento;
-                if (diasArejamento > 0) {
-                    fimArejamento = new Date(inicioArejamento);
-                    fimArejamento.setDate(inicioArejamento.getDate() + diasArejamento - 1); // <-- corrigido
-                } else {
-                    fimArejamento = new Date(inicioArejamento);
-                }
-                
-                return {
-                    diasServico,
-                    diasArejamento,
-                    diasPerdidos,
-                    dataRetornoOrigem: dataRetornoOrigem.toISOString().split('T')[0],
-                    inicioArejamento: inicioArejamento.toISOString().split('T')[0],
-                    fimArejamento: fimArejamento.toISOString().split('T')[0]
-                };
-            }
+    const dataChegada = new Date(chegada);
+    const dataSaida = new Date(saida);
+
+    // 1️⃣ Dias de serviço (inclui último dia)
+    const diffTime = Math.abs(dataSaida - dataChegada);
+    const diasServico = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    // 2️⃣ Dias de arejamento (5 dias de serviço = 1 dia de arejamento)
+    const diasArejamento = Math.floor(diasServico / 5);
+    const diasPerdidos = diasServico % 5;
+
+    // 3️⃣ Retorno à origem (2 dias de deslocamento)
+    const dataRetornoOrigem = new Date(dataSaida);
+    dataRetornoOrigem.setDate(dataSaida.getDate() + 2);
+
+    // 4️⃣ Início do arejamento (dia seguinte ao retorno)
+    const inicioArejamento = new Date(dataRetornoOrigem);
+    inicioArejamento.setDate(dataRetornoOrigem.getDate() + 1);
+
+    // 5️⃣ Fim do arejamento
+    let fimArejamento;
+    if (diasArejamento > 0) {
+        fimArejamento = new Date(inicioArejamento);
+        fimArejamento.setDate(inicioArejamento.getDate() + diasArejamento - 1);
+    } else {
+        fimArejamento = new Date(inicioArejamento);
+    }
+
+    return {
+        diasServico,
+        diasArejamento,
+        diasPerdidos,
+        dataRetornoOrigem: dataRetornoOrigem.toISOString().split('T')[0],
+        inicioArejamento: inicioArejamento.toISOString().split('T')[0],
+        fimArejamento: fimArejamento.toISOString().split('T')[0]
+    };
+}
 
             showPreview() {
                 const saidaOrigem = document.getElementById('dataSaidaOrigem').value;
